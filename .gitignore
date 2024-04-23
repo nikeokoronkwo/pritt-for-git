@@ -1,0 +1,6 @@
+private/
+pre-release/
+internal/
+
+**/build/
+**/dist/

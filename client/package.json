@@ -1,0 +1,9 @@
+{
+  "name": "pritt-ui",
+  "version": "0.1.0",
+  "description": "The Pritt User Interface ",
+  "main": "index.js",
+  "author": "Pritt Team",
+  "license": "MIT",
+  "private": true
+}
