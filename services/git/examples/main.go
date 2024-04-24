@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	. "pritt/pritt"
+	"pritt/pritt"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Get git info
-	gitProject, err := GetGitInfo(dir)
+	gitProject, err := pritt.GetGitInfo(dir)
 	if err != nil {
 		fmt.Println("Error: ", err)
 		os.Exit(1)
