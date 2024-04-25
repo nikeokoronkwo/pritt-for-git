@@ -1,4 +1,4 @@
-
+import 'package:env/env.dart';
 
 part 'env.g.dart';
 

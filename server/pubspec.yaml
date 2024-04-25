@@ -12,6 +12,8 @@ dependencies:
   shelf_static: ^1.1.2
   yaml: ^3.1.2
   yaml_edit: ^2.2.0
+  env:
+    path: "../packages/env"
 
 dev_dependencies:
   build: ^2.4.1
