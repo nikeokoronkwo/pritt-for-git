@@ -2,6 +2,12 @@
 This is the pritt server, written and implemented in the [dart language](https://dart.dev/).
 
 ## Running the sample
+In order to run the sample, the first thing you should do is to create the build files needed for the server to work correctly. You can do this by running 
+```bash
+dart run build_runner build
+```
+
+After, you can follow the instructions afterwards:
 
 ### Running with the Dart SDK
 
