@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: rgb(248, 213, 76);
+  --background-color: #202731;
+  --secondary-background-color: white;
+  --tw-text-opacity: 1;
+  --secondary-color: rgb(30 58 138 / var(--tw-text-opacity));
+}
+
+body {
+  margin: 0;
+  font-family: 'Red Hat Display', sans-serif;
+  color: var(--primary-color);
+  background-color: var(--background-color);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
