@@ -1,0 +1,14 @@
+name: env_example
+description: A sample of using/implementing the env package.
+
+environment:
+  sdk: ^3.3.0
+
+# Add regular dependencies here.
+dependencies:
+  env: 
+    path: ..
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.24.0

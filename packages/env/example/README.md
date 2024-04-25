@@ -1,2 +1,7 @@
-# `env` Examples
-There are none at the moment, but you can have a look at it's usage in [the server](../../../server/README.md).
+# Example for the `env` package
+
+In order to run this example, run
+```bash
+dart run build_runner build
+dart run bin/example.dart
+```

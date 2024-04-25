@@ -1,0 +1,10 @@
+include: package:lints/core.yaml
+
+# linter:
+#   rules:
+#     - camel_case_types
+
+analyzer:
+  exclude:
+    - lib/example.dart
+
