@@ -1,5 +1,5 @@
-import api from "@/lib/api"
+import api from '@/lib/api'
 
 export function getRepos() {
-    return api.get('/repos')
+  return api.get('/repos')
 }
