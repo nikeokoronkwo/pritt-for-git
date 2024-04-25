@@ -10,7 +10,7 @@ Handler getReposHandler() {
   try {
   String data = File(pathToList).readAsStringSync();
   
-  return (Request req) => Response.ok(data);
+  return (Request req) => Response.ok(data, headers: { 'Content-Type': 'application/json'});
   } on FileSystemException catch (e) {
     print("Error retrieving data: ${e.message}");
     log("Path: ${e.path}");

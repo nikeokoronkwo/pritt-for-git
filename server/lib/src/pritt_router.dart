@@ -7,9 +7,9 @@ import 'package:shelf_static/shelf_static.dart';
 
 class PrittServer {
   Cascade _cascade;
-  final Router router;
+  Router router;
 
-  PrittServer(): _cascade = Cascade(), router = Router() {}
+  PrittServer({Router? router}): _cascade = Cascade(), router = router ?? Router() {}
 
   PrittServer client(String path) {
     _cascade = _cascade.add(createStaticHandler(path, serveFilesOutsidePath: true, defaultDocument: 'index.html'));
@@ -17,9 +17,8 @@ class PrittServer {
   }
 
   void run({String? ip, int? port}) async {
-    _cascade.add(router.call);
     final serverIp = ip ?? InternetAddress.anyIPv4;
-    final handler = Pipeline().addMiddleware(logRequests()).addHandler(_cascade.handler);
+    final handler = Pipeline().addMiddleware(logRequests()).addHandler(_cascade.add(router.call).handler);
     final serverPort = port ?? int.parse(Platform.environment['PORT'] ?? '8080');
     final server = await serve(handler, serverIp, serverPort);
     print('Server listening on port ${server.port}');
