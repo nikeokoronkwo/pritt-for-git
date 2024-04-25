@@ -1,6 +1,5 @@
-// TODO: Put public facing types in this file.
-
-/// Checks if you are awesome. Spoiler: you are.
-class Awesome {
-  bool get isAwesome => true;
+// ignore: camel_case_types
+class env {
+  final String name;
+  const env(this.name);
 }
