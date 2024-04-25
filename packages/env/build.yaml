@@ -1,0 +1,7 @@
+builders:
+  env_embedder:
+    import: "package:env/env_builder.dart"
+    builder_factories: ["envEmbedderBuilder"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source
