@@ -7,7 +7,7 @@
         <button
           class="px-4 py-1 rounded-full border border-spacing-4 border-white hover:text-white hover:bg-yellow-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
         >
-          <RouterLink to="/repos">Your Repositories</RouterLink>
+          <RouterLink to="/repositories">Your Repositories</RouterLink>
         </button>
         <button
           class="px-4 py-1 rounded-full border border-spacing-4 border-white hover:text-white hover:bg-yellow-500 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import About from '@/pages/About.vue'
 import Home from '@/pages/Home.vue'
+//@ts-ignore
 import CreateRepository from '@/pages/CreateRepository.vue'
 
 const router = createRouter({
@@ -20,7 +21,7 @@ const router = createRouter({
       component: About
     },
     {
-      path: '/repos',
+      path: '/repositories',
       name: 'repositories',
       //@ts-ignore
       component: () => import('@/pages/Repositories.vue')
