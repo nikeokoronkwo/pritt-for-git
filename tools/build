@@ -1,0 +1,13 @@
+#!/bin/sh
+
+SRCDIR=$(dirname $0)
+RUBY="ruby"
+
+if command -v ruby &> /dev/null; then
+   RUBY="ruby"
+else
+    echo "In order to build this project, you will need ruby installed."
+    exit 1
+fi
+
+exec "$RUBY" "$SRCDIR/build.rb" $@
