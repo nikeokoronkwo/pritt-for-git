@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "prittbuild/version"
+require "prittbuild/version"
+require "prittbuild/log"
 
 module Prittbuild
   class Error < StandardError; end
-  # Your code goes here...
+
+  def self.start
+    self.log "PRITTBUILD"
+    self.log "Building the Pritt Project"
+  end
 end

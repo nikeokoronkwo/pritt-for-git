@@ -8,3 +8,7 @@ RSpec::Core::RakeTask.new(:spec)
 require "standard/rake"
 
 task default: %i[spec standard]
+
+task :test do
+    ruby 'test/prittbuild_test.rb'
+end
