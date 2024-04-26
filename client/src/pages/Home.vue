@@ -19,10 +19,7 @@
   </div>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Nabla&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
-
+<style scoped>
 section {
   position: relative;
   display: flex;
@@ -57,4 +54,11 @@ section div {
     'EHLT' 12;
   padding: 40px;
 }
+</style>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nabla&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
+
 </style>

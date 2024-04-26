@@ -20,7 +20,7 @@ class PrittServer {
 
   void run({String? ip, int? port, Map<String, dynamic>? cors}) async {
     final serverIp = ip ?? InternetAddress.anyIPv4;
-    final handler = Pipeline().addMiddleware(logRequests(logger: prittLog)).addHandler(_cascade.add(router.call).handler);
+    final handler = Pipeline().addMiddleware(logRequests()).addHandler(_cascade.add(router.call).handler);
     final serverPort = port ?? int.parse(Platform.environment['PORT'] ?? '8080');
     final server = await serve(handler, serverIp, serverPort, poweredByHeader: "Pritt Server");
     print('Server listening on port ${server.port}');

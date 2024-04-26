@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:pritt_server/gen/env.dart';
 import 'package:pritt_server/src/utils/cors.dart';
 import 'package:pritt_server/src/utils/log.dart';
@@ -9,16 +11,14 @@ import 'package:shelf/shelf.dart';
 import 'package:path/path.dart' as p;
 
 Handler getReposHandler(int port, [bool preprod = false]) {
-  // Path of data relative to 'server'
-  String pathToList = dataPath;
   try {
-  String data = File(pathToList).readAsStringSync();
+    String data = File(dataPath).readAsStringSync();
   
-  return (Request req) {
-    Map<String, Object> headers = {'Content-Type': 'application/json'};
-    headers.addAll(corsHeaders(preprod ? null : port));
-    return Response.ok(data, headers: headers);
-  };
+    return (Request req) {
+      Map<String, Object> headers = {'Content-Type': 'application/json'};
+      headers.addAll(corsHeaders(preprod ? null : port));
+      return Response.ok(data, headers: headers);
+    };
 
   } on FileSystemException catch (e) {
     prittLog("Error retrieving data: ${e.message}", true);
@@ -55,8 +55,42 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
     final jsonData = json.decode(await req.readAsString());
     final path = p.join(jsonData['base'] ?? '', jsonData['path'] ?? '');
 
-    prittLog("${jsonData} produces ${path} that is added to ${data}", false);
+    final hash = hashInfo(name, path);
+
+    data.add({
+      'name': name,
+      'path': path,
+      'hash': hash
+    });
+    
+    try {
+      File(pathToList).writeAsString(json.encode(data));
+    } on FileSystemException catch (e) {
+      prittLog("Error retrieving data: ${e.message}", true);
+      return Response.internalServerError(body: "Data couldn't be added");
+    } on TypeError catch (e) {
+      prittLog("The JSON isn't valid: ${e.stackTrace}", true);
+      return Response.badRequest(body: "Data couldn't be marshalled");
+    } catch (e) {
+      prittLog("Unknown error occured", true);
+      return Response(808, body: "Unknown Error adding data");
+    }
     
     return Response.ok("", headers: headers);
   };
+}
+
+String hashInfo(String name, String path) {
+  var nameChunk = utf8.encode(name);
+  var pathChunk = utf8.encode(path);
+
+  var output = AccumulatorSink<Digest>();
+  var input = sha256.startChunkedConversion(output);
+  input.add(nameChunk);
+  input.add(pathChunk);
+  input.close();
+
+  var digest = output.events.single;
+
+  return digest.toString();
 }
