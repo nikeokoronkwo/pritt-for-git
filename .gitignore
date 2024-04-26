@@ -5,4 +5,4 @@ internal/
 **/build/
 **/dist/
 examples/project-one
-db/repos.json
+data/

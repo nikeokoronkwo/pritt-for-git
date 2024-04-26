@@ -10,3 +10,5 @@ part of 'env.dart';
 // **************************************************************************
 
 String DATA_ENTRY = "../data/repos.json";
+
+String CLIENT_DIR = "../client/dist";

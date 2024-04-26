@@ -5,6 +5,8 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
 
+import 'utils/log.dart';
+
 class PrittServer {
   Cascade _cascade;
   Router router;
@@ -16,11 +18,11 @@ class PrittServer {
     return this;
   }
 
-  void run({String? ip, int? port}) async {
+  void run({String? ip, int? port, Map<String, dynamic>? cors}) async {
     final serverIp = ip ?? InternetAddress.anyIPv4;
-    final handler = Pipeline().addMiddleware(logRequests()).addHandler(_cascade.add(router.call).handler);
+    final handler = Pipeline().addMiddleware(logRequests(logger: prittLog)).addHandler(_cascade.add(router.call).handler);
     final serverPort = port ?? int.parse(Platform.environment['PORT'] ?? '8080');
-    final server = await serve(handler, serverIp, serverPort);
+    final server = await serve(handler, serverIp, serverPort, poweredByHeader: "Pritt Server");
     print('Server listening on port ${server.port}');
   }
 }
