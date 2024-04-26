@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"pritt/pritt"
+
+	pritt "../package"
 )
 
 func main() {
