@@ -3,10 +3,12 @@ require_relative "utils/platform"
 require_relative "utils/runner"
 
 require 'yaml'
+require 'fileutils'
 
 module PrittBuild
-  def self.build_service(directory, lang, config={})
-    service_name = config[:name] || File.dirname(directory)
+  def self.build_service(directory, lang, output, config={})
+    service_name = config[:name] || File.basename(directory)
+    service_bin_name = "pritt-#{service_name}"
     build_pwd = Dir.pwd
 
     PrittLogger::log("Begin Building #{service_name} pritt service", PrittLogger::LogLevel::INFO)
@@ -35,6 +37,7 @@ module PrittBuild
     # Run prerequisite commands
     config[:before].each do |pre|
       # Move to dir for command
+      puts File.join(directory, pre[:dir] || ".")
       service_cmd_dir = File.join(directory, pre[:dir] || ".")
       Dir.chdir(service_cmd_dir)
 
@@ -52,7 +55,10 @@ module PrittBuild
     when "go"
       service_entry_dir = File.dirname(service_entrypoint)
       Dir.chdir(service_entry_dir)
-      service_runner.run("go build . -o pritt-#{service_name}")
+      service_runner.run("go build -o pritt-#{service_name} .")
+      if service_runner.exit_code != 0
+        exit service_runner.exit_code
+      end
     when "dart"
       if File.basename(File.dirname(service_entrypoint)) == "bin"
 
@@ -60,10 +66,16 @@ module PrittBuild
         service_entry_dir = File.dirname(File.dirname(service_entrypoint))
         Dir.chdir(service_entry_dir)
         service_runner.run("dart compile bin/#{File.basename(service_entrypoint)} -o pritt-#{service_name}")
+        if service_runner.exit_code != 0
+          exit service_runner.exit_code
+        end
       else
         service_entry_dir = File.dirname(service_entrypoint)
         Dir.chdir(service_entry_dir)
         service_runner.run("dart compile #{File.basename(service_entrypoint)} -o pritt-#{service_name}")
+        if service_runner.exit_code != 0
+          exit service_runner.exit_code
+        end
       end
     else
       if config[:compile] == nil
@@ -73,6 +85,9 @@ module PrittBuild
         service_entry_dir = File.dirname(File.dirname(service_entrypoint))
         Dir.chdir(service_entry_dir)
         service_runner.run(config[:compile])
+        if service_runner.exit_code != 0
+          exit service_runner.exit_code
+        end
       end
     end
 
@@ -82,10 +97,18 @@ module PrittBuild
     Dir.chdir(build_pwd)
 
     # Copy compiled binary to build
+    service_bin_dest = File.join(output, "pritt-#{service_name}")
+    service_bin_src = File.join(directory, "pritt-#{service_name}")
 
+    PrittLogger::log("Moving #{service_name} service to #{service_bin_dest}", PrittLogger::LogLevel::INFO)
+    FileUtils.cp(service_bin_src, service_bin_dest)
+    FileUtils.rm(service_bin_src)
+
+    PrittLogger::log("#{service_name} service: Build Completed!", PrittLogger::LogLevel::FINE)
   end
 
-  private def self.find_entrypoint(dir, lang)
+  private
+  def self.find_entrypoint(dir, lang)
     case lang
     when "go"
       if File.exists?(File.join(dir, "main.go"))
@@ -109,6 +132,7 @@ module PrittBuild
           pubspec_file = YAML.load(File.read(File.join(dir, "pubspec.yaml")))
           package_name = pubspec_file["name"]
           return File.join(dir, "bin#{separator}#{package_name}.dart")
+        end
       end
     else
       Dir.foreach(dir) do |file|

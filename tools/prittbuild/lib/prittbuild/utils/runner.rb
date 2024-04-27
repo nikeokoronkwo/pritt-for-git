@@ -12,13 +12,19 @@ class PrittRunner
   end
 
   # Run given command `cmd`
-  def run(cmd)
-    result = `#{cmd}`
+  def run(cmd, args=[])
+    result = `#{cmd}#{args.length == 0 ? " #{args.join(" ")}" : nil}`
     if result.nil? || result.empty?
-      PrittLogger::log("Command \"#{cmd}\" failed ", PrittLogger::LogLevel::SEVERE)
       error_message = $?.to_s.split("\n").last
-      PrittLogger::log(error_message, PrittLogger::LogLevel::INFO)
-      @exit_code = 1
+      exit_code = error_message.split(" ").last.to_i
+      if exit_code != 0
+        PrittLogger::log("Command \"#{cmd}\" failed ", PrittLogger::LogLevel::SEVERE)
+        PrittLogger::log(error_message, PrittLogger::LogLevel::INFO)
+        @exit_code = exit_code
+      else
+        result.each_line { |line| PrittLogger::log(line, PrittLogger::LogLevel::PROCESS) }
+        @exit_code = 0
+      end
     else
       result.each_line { |line| PrittLogger::log(line, PrittLogger::LogLevel::PROCESS) }
       @exit_code = 0

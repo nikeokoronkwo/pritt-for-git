@@ -117,17 +117,17 @@ def main()
     case file
     when "git"
       # build the git service
-      PrittBuild.build_service(service, "go", {
+      PrittBuild.build_service(service, "go", pritt_build_dir.bin_dir, {
         :entry => "main.go",
         :before => [{
-          :cmd => "go fmt"
+          :cmd => "go fmt",
           :dir => "."
         }, {
           :cmd => "go mod tidy",
-          :dir => "packages"
+          :dir => "package"
         }, {
           :cmd => "go get",
-          :dir => "packages"
+          :dir => "package"
         }]
       })
     else
