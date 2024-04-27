@@ -4,7 +4,7 @@ require_relative "lib/prittbuild/version"
 
 Gem::Specification.new do |spec|
   spec.name = "prittbuild"
-  spec.version = Prittbuild::VERSION
+  spec.version = PrittBuild::VERSION
   spec.authors = ["--add"]
   spec.email = ["nikechukwu@gmail.com"]
 
