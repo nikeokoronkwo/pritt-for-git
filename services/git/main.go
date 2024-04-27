@@ -22,6 +22,12 @@ func main() {
 		fmt.Println("Error: ", err) */
 		os.Exit(1)
 	}
+
+	if args[1] == "--help" {
+		fmt.Println("pritt-git [options] <directory>")
+		os.Exit(0)
+	}
+
 	// Get the absolute path
 	dir, err := filepath.Abs(args[1])
 	if err != nil {
