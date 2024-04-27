@@ -1,3 +1,5 @@
+require_relative "utils/platform"
+
 module PrittBuild
   class BuildDir
     def initialize(dir="~/.pritt/build")
@@ -18,17 +20,6 @@ module PrittBuild
 
     def bin_dir
       "#{@main_dir}#{PrittBuildUtils::separator}bin"
-    end
-  end
-end
-
-module PrittBuildUtils
-  def self.separator
-    win = (RUBY_PLATFORM =~ /(mingw|mswin)/) != nil
-    if win
-      return "\\"
-    else
-      return "/"
     end
   end
 end

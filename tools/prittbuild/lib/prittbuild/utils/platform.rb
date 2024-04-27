@@ -15,3 +15,14 @@ class PrittPlatform
     RUBY_PLATFORM
   end
 end
+
+module PrittBuildUtils
+  def self.separator
+    win = (RUBY_PLATFORM =~ /(mingw|mswin)/) != nil
+    if win
+      return "\\"
+    else
+      return "/"
+    end
+  end
+end

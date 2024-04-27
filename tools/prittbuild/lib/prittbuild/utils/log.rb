@@ -7,6 +7,7 @@ module PrittLogger
     WARN = 2
     SEVERE = 3
     FINE = 4
+    PROCESS = 5
   end
 
   def self.log(msg, level=LogLevel::NORMAL)
@@ -21,6 +22,8 @@ module PrittLogger
       puts "#{PrittANSI::wrap("[ERROR]", PrittANSI::Red)}: #{msg}"
     when 4
       puts "#{PrittANSI::wrap("[FINE]", PrittANSI::Green)}: #{msg}"
+    when 5
+      puts "#{PrittANSI::wrap("[PROC]", PrittANSI::Cyan)}: #{msg}"
     else
       puts msg
     end

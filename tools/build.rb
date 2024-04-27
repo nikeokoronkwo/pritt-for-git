@@ -39,8 +39,23 @@ end
 def get_dart_version(project_dir)
   dart_version_path = "#{project_dir}#{separator}.dart-version"
   if File.exists?(dart_version_path)
+    version = File.read(dart_version_path).strip
+    return version
+  else
+    return fallback_dart_version
+  end
+end
 
-  elsif File.exists("#{project_dir}")
+# Get desired golang version for project
+def get_go_version(project_dir)
+  go_version_path = "#{project_dir}#{separator}.go-version"
+  if File.exists?(go_version_path)
+    version = File.read(go_version_path).strip
+    return version
+  else
+    return fallback_go_version
+  end
+end
 
 # Parse command-line arguments
 def parse_args()
@@ -68,9 +83,30 @@ def main()
   # Derive build directories
   pritt_build_dir = PrittBuild::BuildDir.new(File.expand_path(options[:output] || "#{Dir.home}/.pritt/build"))
 
-  puts pritt_build_dir.data_dir
-  puts PrittBuild::Project_Dir
-  PrittBuild.check
+  # Derive project directory
+  pritt_project_dir = "#{File.expand_path("#{File.dirname(__FILE__)}/..")}"
+
+  # Start build service
+  PrittBuild.start()
+
+  # Check for dependencies
+  PrittBuild.check({
+    :npm => get_node_version(pritt_project_dir),
+    :go => get_go_version(pritt_project_dir),
+    :dart => get_dart_version(pritt_project_dir)
+  })
+
+  # Create destinations
+  PrittBuild.create_dir(pritt_build_dir)
+
+  # Deduce client directory
+  pritt_client_dir = "#{pritt_project_dir}#{separator}client"
+
+  # Build client
+  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir)
+
+  # Clean up build
+  PrittBuild.cleanup()
 end
 
 main()
