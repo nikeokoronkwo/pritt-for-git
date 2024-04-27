@@ -81,10 +81,10 @@ end
 def main()
   options = parse_args()
   # Derive build directories
-  pritt_build_dir = PrittBuild::BuildDir.new(File.expand_path(options[:output] || "#{Dir.home}/.pritt/build"))
+  pritt_build_dir = PrittBuild::BuildDir.new(File.expand_path(options[:output] || "#{Dir.home}#{separator}.pritt#{separator}build"))
 
   # Derive project directory
-  pritt_project_dir = "#{File.expand_path("#{File.dirname(__FILE__)}/..")}"
+  pritt_project_dir = "#{File.expand_path("#{File.dirname(__FILE__)}#{separator}..")}"
 
   # Start build service
   PrittBuild.start()
@@ -104,6 +104,36 @@ def main()
 
   # Build client
   PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir)
+
+  # Build Assets
+  PrittBuild.gen(PrittBuild::Assets::DATA, pritt_build_dir.data_dir, "[]")
+
+  # Build Services
+  pritt_services_dir = "#{pritt_project_dir}#{separator}services"
+  Dir.foreach(pritt_services_dir) do |file|
+    service = File.join(pritt_services_dir, file)
+    next if !File.directory?(service)
+
+    case file
+    when "git"
+      # build the git service
+      PrittBuild.build_service(service, "go", {
+        :entry => "main.go",
+        :before => [{
+          :cmd => "go fmt"
+          :dir => "."
+        }, {
+          :cmd => "go mod tidy",
+          :dir => "packages"
+        }, {
+          :cmd => "go get",
+          :dir => "packages"
+        }]
+      })
+    else
+      next
+    end
+  end
 
   # Clean up build
   PrittBuild.cleanup()

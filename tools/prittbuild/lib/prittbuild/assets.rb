@@ -6,8 +6,10 @@ module PrittBuild
     DATA = "repos.json"
   end
 
-  def self.gen(asset, dir)
+  def self.gen(asset, dir, data="")
     PrittLogger::log("Generating #{asset}", PrittLogger::LogLevel::INFO)
-    File.create("#{dir}#{PrittBuildUtils::separator}#{asset}")
+    File.open("#{dir}#{PrittBuildUtils::separator}#{asset}", "w") do |file|
+      file.puts data
+    end
   end
 end
