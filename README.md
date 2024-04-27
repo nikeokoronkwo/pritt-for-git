@@ -24,7 +24,7 @@ cd pritt
 ```
 Once you have that, you can run the following command to build the project. 
 ```bash
-./tools/build
+./tools/build 
 ```
 
 This will run `prittbuild` and build the pritt project. If you want to specify a different directory to build the output to, you can do so by adding the `--output` option with the desired output.
