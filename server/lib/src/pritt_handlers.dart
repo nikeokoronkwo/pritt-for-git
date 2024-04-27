@@ -13,18 +13,18 @@ import 'package:path/path.dart' as p;
 Handler getReposHandler(int port, [bool preprod = false]) {
   try {
     String data = File(dataPath).readAsStringSync();
-  
+
     return (Request req) {
       Map<String, Object> headers = {'Content-Type': 'application/json'};
       headers.addAll(corsHeaders(preprod ? null : port));
       return Response.ok(data, headers: headers);
     };
-
   } on FileSystemException catch (e) {
     prittLog("Error retrieving data: ${e.message}", true);
     log("Path: ${e.path}");
 
-    return (Request req) => Response.internalServerError(body: "Data not found");
+    return (Request req) =>
+        Response.internalServerError(body: "Data not found");
   } catch (e) {
     prittLog("Unknown error occured", true);
     log("Error object: $e");
@@ -32,6 +32,7 @@ Handler getReposHandler(int port, [bool preprod = false]) {
     return (Request req) => Response(808, body: "Unknown Error");
   }
 }
+
 Handler addRepoHandler(String name, int port, [bool preprod = false]) {
   String pathToList = dataPath;
   List data = [];
@@ -42,7 +43,8 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
     data = json.decode(File(pathToList).readAsStringSync());
   } on FileSystemException catch (e) {
     prittLog("Error retrieving data: ${e.message}", true);
-    return (Request req) => Response.internalServerError(body: "Data not found");
+    return (Request req) =>
+        Response.internalServerError(body: "Data not found");
   } on TypeError catch (e) {
     prittLog("The JSON isn't valid: ${e.stackTrace}", true);
     return (Request req) => Response.badRequest(body: "Invalid JSON");
@@ -57,12 +59,8 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
 
     final hash = hashInfo(name, path);
 
-    data.add({
-      'name': name,
-      'path': path,
-      'hash': hash
-    });
-    
+    data.add({'name': name, 'path': path, 'hash': hash});
+
     try {
       File(pathToList).writeAsString(json.encode(data));
     } on FileSystemException catch (e) {
@@ -75,7 +73,7 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
       prittLog("Unknown error occured", true);
       return Response(808, body: "Unknown Error adding data");
     }
-    
+
     return Response.ok("", headers: headers);
   };
 }
