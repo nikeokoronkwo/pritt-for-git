@@ -1,17 +1,19 @@
-<script lang="ts">
-import RepoView from './RepoView.vue'
+<script>
+import RepoView from '../components/RepoView.vue'
 export default {
-    name: "DynamicRoute",
-    data() {
-        return {
-            dynamicParam: null
-        };
-    },
-    created() {
-        // Access dynamic parameter from route
-        this.dynamicParam = this.$route.params.id;
-    },
-    components: { RepoView }
+  name: 'DynamicRoute',
+  data() {
+    return {
+      dynamicParam: null
+    }
+  },
+  created() {
+    // Access dynamic parameter from route
+    this.dynamicParam = this.$route.params.id
+  },
+  components: {
+    RepoView
+  }
 }
 </script>
 
