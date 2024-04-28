@@ -10,6 +10,8 @@ require "prittbuild/assets"
 require "prittbuild/build_service"
 require "prittbuild/build_server"
 
+# require "prittbuild/compress"
+
 module PrittBuild
   class Error < StandardError; end
 
@@ -20,7 +22,7 @@ module PrittBuild
   end
 
   def self.variables()
-
+    # Implement later
   end
 
   def self.cleanup(directory)
@@ -28,6 +30,4 @@ module PrittBuild
     puts "\nThe prittbuild project has been built successfully!", "Find the build at #{directory}", ""
     puts "--- PRITTBUILD ---"
   end
-
-
 end

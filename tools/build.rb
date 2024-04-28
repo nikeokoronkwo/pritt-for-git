@@ -10,29 +10,13 @@ require 'prittbuild'
 
 require_relative "build_utils"
 
-# Parse command-line arguments
-def parse_args()
-  options = {}
-  OptionParser.new do |opt|
-    opt.banner = """  Pritt Build Tool using the PrittBuild Gem
-
-    Usage: ./build [options]
-    """
-
-    # Specify output directory
-    opt.on("-o", "--output <dir>", "Output directory to use") do |o|
-      unless File.directory?(o)
-        puts "You need to specify a directory", "Usage: ./build [options]", "\nUse '-h' or '--help' for more information"
-        exit 1
-      end
-      options[:output] = "#{o}#{separator}build"
-    end
-  end.parse!
-  return options
-end
-
 def main()
-  options = parse_args()
+  options = parse_args("build")
+
+  if options[:version]
+    puts "PrittBuild v#{PrittBuild.get_version} on #{RUBY_PLATFORM}"
+    exit 0
+  end
   # Derive build directories
   pritt_build_dir = PrittBuild::BuildDir.new(File.expand_path(options[:output] || "#{Dir.home}#{separator}.pritt#{separator}build"))
 
@@ -98,13 +82,15 @@ def main()
     :services => pritt_build_dir.bin_dir,
     :data => pritt_build_dir.data_dir,
     :before => [{
-          :cmd => "dart fix --apply",
-          :dir => "."
-        }, {
-          :cmd => "dart format .",
-          :dir => "."
-        }]
+      :cmd => "dart fix --apply",
+      :dir => "."
+    }, {
+      :cmd => "dart format .",
+      :dir => "."
+    }]
   })
+
+  # PrittBuild.compress_zip(pritt_build_dir.main_dir) if options[:zip]
 
   # Clean up build
   PrittBuild.cleanup(pritt_build_dir.main_dir)

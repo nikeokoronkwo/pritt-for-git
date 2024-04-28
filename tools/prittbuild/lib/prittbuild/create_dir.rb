@@ -8,7 +8,7 @@ module PrittBuild
     if File.exists?(directory.main_dir)
       FileUtils.rm_rf(directory.main_dir)
     end
-    Dir.mkdir(directory.main_dir)
+    FileUtils.mkdir_p(directory.main_dir)
     Dir.mkdir(directory.client_dir)
     Dir.mkdir(directory.data_dir)
     Dir.mkdir(directory.bin_dir)
