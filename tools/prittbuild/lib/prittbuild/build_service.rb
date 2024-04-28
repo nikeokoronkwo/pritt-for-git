@@ -37,7 +37,6 @@ module PrittBuild
     # Run prerequisite commands
     config[:before].each do |pre|
       # Move to dir for command
-      puts File.join(directory, pre[:dir] || ".")
       service_cmd_dir = File.join(directory, pre[:dir] || ".")
       Dir.chdir(service_cmd_dir)
 

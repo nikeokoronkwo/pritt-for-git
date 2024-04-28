@@ -65,9 +65,11 @@ def main()
   pritt_services_dir = "#{pritt_project_dir}#{separator}services"
   Dir.foreach(pritt_services_dir) do |file|
     service = File.join(pritt_services_dir, file)
+    next if file == '.' || file == '..'
     next if !File.directory?(service)
 
     case file
+    # For now only "git" has been done
     when "git"
       # build the git service
       PrittBuild.build_service(service, "go", pritt_build_dir.bin_dir, {
@@ -88,8 +90,24 @@ def main()
     end
   end
 
+  pritt_server_dir = "#{pritt_project_dir}#{separator}server"
+
+  # Build the server
+  PrittBuild.build_server(pritt_server_dir, pritt_build_dir.bin_dir, {
+    :client => pritt_build_dir.client_dir,
+    :services => pritt_build_dir.bin_dir,
+    :data => pritt_build_dir.data_dir,
+    :before => [{
+          :cmd => "dart fix --apply",
+          :dir => "."
+        }, {
+          :cmd => "dart format .",
+          :dir => "."
+        }]
+  })
+
   # Clean up build
-  PrittBuild.cleanup()
+  PrittBuild.cleanup(pritt_build_dir.main_dir)
 end
 
 main()

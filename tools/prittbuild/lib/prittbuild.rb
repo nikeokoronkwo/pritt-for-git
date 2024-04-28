@@ -16,18 +16,17 @@ module PrittBuild
   # Start the build process
   def self.start()
     # Print startup message
-    puts "--- PRITTBUILD ---"
-    puts "Building the Pritt Project"
+    puts "--- PRITTBUILD ---", "Building the Pritt Project"
   end
-
-
 
   def self.variables()
 
   end
 
-  def self.cleanup()
-
+  def self.cleanup(directory)
+    # Print end message
+    puts "\nThe prittbuild project has been built successfully!", "Find the build at #{directory}", ""
+    puts "--- PRITTBUILD ---"
   end
 
 
