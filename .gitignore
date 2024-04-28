@@ -7,3 +7,4 @@ internal/
 examples/project-one
 data/
 **/*.g.dart
+**/.build/
