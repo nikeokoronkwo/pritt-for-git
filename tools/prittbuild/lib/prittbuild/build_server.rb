@@ -16,7 +16,7 @@ module PrittBuild
     # Set env
     PrittLogger::log("Setting Configurations", PrittLogger::LogLevel::INFO)
     server_env_file = File.join(directory, ".env")
-    server_env_data = File.read(server_env_file)
+    server_env_orig = File.read(server_env_file)
     server_env_content = {
       "DATA_JSON" => File.join(config[:data] || "#{output}#{separator}..#{separator}data", "repos.json"),
       "CLIENT_DIR" => config[:client] || "#{output}#{separator}..#{separator}client",
@@ -72,6 +72,7 @@ module PrittBuild
     Dir.chdir(build_pwd)
 
     PrittLogger::log("Reverting and cleaning up", PrittLogger::LogLevel::INFO)
+    File.write(server_env_file, server_env_orig)
 
     # Copy to bin
     server_source_file = File.join(directory, "pritt")
