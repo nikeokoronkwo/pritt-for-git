@@ -27,11 +27,14 @@ def main()
   PrittBuild.start()
 
   # Check for dependencies
-  PrittBuild.check({
+  optional_deps = PrittBuild.check({
     :npm => get_node_version(pritt_project_dir),
     :go => get_go_version(pritt_project_dir),
-    :dart => get_dart_version(pritt_project_dir)
+    :dart => get_dart_version(pritt_project_dir),
+    :yarn => ""
   })
+
+  yarn_exists = optional_deps[:yarn]
 
   # Create destinations
   PrittBuild.create_dir(pritt_build_dir)
@@ -40,7 +43,7 @@ def main()
   pritt_client_dir = "#{pritt_project_dir}#{separator}client"
 
   # Build client
-  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir)
+  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir, yarn_exists)
 
   # Build Assets
   PrittBuild.gen(PrittBuild::Assets::DATA, pritt_build_dir.data_dir, "[]")

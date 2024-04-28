@@ -36,7 +36,7 @@ def main()
   pritt_client_dir = "#{pritt_project_dir}#{separator}client"
 
   # Build client
-  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir)
+  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir, true)
 
   # Build Assets
   PrittBuild.gen(PrittBuild::Assets::DATA, pritt_build_dir.data_dir, "[]")

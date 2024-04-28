@@ -28,9 +28,15 @@ module PrittBuild
     end.join("\n")
     File.write(server_env_file, server_env_content)
 
+    Dir.chdir(directory)
+
+    # Get dependencies
+    PrittLogger::log("Getting Client Dependencies", PrittLogger::LogLevel::INFO)
+    server_runner.run("dart pub get")
+
     # Run build_runner
     PrittLogger::log("Applying Configurations to server code", PrittLogger::LogLevel::INFO)
-    Dir.chdir(directory)
+
     server_env_gen_file = File.join(directory, "lib#{separator}gen#{separator}env.g.dart")
     FileUtils.rm(server_env_gen_file) if File.exists?(server_env_gen_file)
     server_runner.run("dart run build_runner build")

@@ -10,7 +10,7 @@ module PrittBuild
   # directory - The client directory
   # output - The client output directory
   #
-  def self.build_client(directory, output)
+  def self.build_client(directory, output, yarn=false)
     # The dist build for client - built with Vite
     client_dist_build = "#{directory}/dist"
     builder_pwd = Dir.pwd
@@ -23,14 +23,18 @@ module PrittBuild
 
     client_run_commands = client_package_json["scripts"]
 
+    # Changed to client directory
+    Dir.chdir(directory)
+
+    # Get deps
+    PrittLogger::log("Getting Client Dependencies", PrittLogger::LogLevel::INFO)
+    client_runner.run(yarn ? "yarn install" : "npm install")
+
     # Format Code
     PrittLogger::log("Formatting Client Code", PrittLogger::LogLevel::INFO)
     client_format_command = client_run_commands["format"]
 
-    # Changed to client directory
-    Dir.chdir(directory)
-
-    client_format = "npx #{client_format_command}"
+    client_format = yarn ? "yarn format" : "npx #{client_format_command}"
     client_runner.run(client_format)
 
     # Write .env file
@@ -42,10 +46,10 @@ module PrittBuild
     PrittLogger::log("Building Client and Running Tests", PrittLogger::LogLevel::INFO)
     client_build_command = client_run_commands["build"]
 
-    client_build = "npx #{client_build_command}"
+    client_build = yarn ? "yarn build" : "npx #{client_build_command}"
     client_runner.run(client_build)
 
-    if Dir.empty?("#{directory}/dist")
+    if Dir.empty?("#{directory}/dist") || !File.exists?("#{directory}/dist")
       PrittLogger::log("An error occured while building the client", PrittLogger::LogLevel::SEVERE)
       PrittLogger::log("Check the 'PROC' logs and try again", PrittLogger::LogLevel::SEVERE)
     end
@@ -67,6 +71,7 @@ module PrittBuild
         FileUtils.cp(source_file, destination_file)
       end
     end
+    FileUtils.rm_rf(client_dist_build)
 
     PrittLogger::log("Client has been built successfully!", PrittLogger::LogLevel::INFO)
   end
