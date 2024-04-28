@@ -2,6 +2,8 @@ private/
 pre-release/
 internal/
 
+**/node_modules/
+
 **/build/
 **/dist/
 examples/project-one

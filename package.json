@@ -1,0 +1,14 @@
+{
+  "name": "pritt",
+  "version": "0.1.0",
+  "description": "Pritt = Code Analysis at your fingertips",
+  "repository": "https://github.com/nikeokoronkwo/pritt.git",
+  "author": "Nike Okoronkwo <nikechukwu@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "yarn@1.22.21",
+  "devDependencies": {
+    "@rex-js/rex": "^0.0.2",
+    "@rex-js/rex-cli": "^0.0.2"
+  }
+}
