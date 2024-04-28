@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:convert/convert.dart';
-import 'package:crypto/crypto.dart';
 import 'package:pritt_server/gen/env.dart';
+import 'package:pritt_server/src/funcs/hash_info.dart';
 import 'package:pritt_server/src/utils/cors.dart';
 import 'package:pritt_server/src/utils/log.dart';
 import 'package:shelf/shelf.dart';
@@ -78,17 +77,39 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
   };
 }
 
-String hashInfo(String name, String path) {
-  var nameChunk = utf8.encode(name);
-  var pathChunk = utf8.encode(path);
 
-  var output = AccumulatorSink<Digest>();
-  var input = sha256.startChunkedConversion(output);
-  input.add(nameChunk);
-  input.add(pathChunk);
-  input.close();
+Handler getRepoInfo(String name, int port, bool dev) {
+  List jsonData = [];
+  try {
+    jsonData = json.decode(File(dataPath).readAsStringSync());
+  } on FileSystemException catch (_) { 
+    return (Request req) => Response.internalServerError(body: "Couldn't get data");
+  } catch (e) {
+    return (Request req) => Response(808, body: "Unknown Error");
+  }
 
-  var digest = output.events.single;
+  String itemPath = jsonData.firstWhere((element) => element['name'] == name)['path'];
 
-  return digest.toString();
+  return (Request req) async {
+    if (dev) {
+      String pathToGoGit = p.join(services, "git");
+      final gitResult = await Process.run("go", ["run", ".", itemPath, "--json"], workingDirectory: pathToGoGit, stdoutEncoding: utf8, stderrEncoding: utf8);
+      if (gitResult.exitCode != 0) {
+        return Response.badRequest(body: "A git repository could not be found");
+      } else {
+        final jsonResult = gitResult.stdout as String;
+        return Response.ok(jsonResult);
+      }
+    } else {
+      String pathToGit = p.join(services, "git", "pritt-git");
+      final gitResult = await Process.run(pathToGit, [itemPath, "--json"]);
+      if (gitResult.exitCode != 0) {
+        return Response.badRequest(body: "A git repository could not be found");
+      } else {
+        final jsonResult = gitResult.stdout as String;
+        return Response.ok(jsonResult);
+      }
+    }
+  };
+  
 }

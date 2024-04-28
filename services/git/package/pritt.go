@@ -13,6 +13,10 @@ func GetGitInfo(dir string) (GitProject, error) {
 	// Initialise a git project
 	var gitProject GitProject = GitProject{}
 	gitDir := fmt.Sprintf("%s/%s", dir, ".git")
+
+	if _, err := os.Stat(gitDir); os.IsNotExist(err) {
+		return GitProject{}, err
+	}
 	// Walk through git directory
 	err := filepath.WalkDir(gitDir, func(path string, dir fs.DirEntry, err error) error {
 		// Process HEAD info

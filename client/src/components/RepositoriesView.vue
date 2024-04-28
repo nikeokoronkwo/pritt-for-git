@@ -1,6 +1,5 @@
 <script setup>
 import * as demoApi from '@/api/demo'
-import { onBeforeMount, onMounted, ref } from 'vue'
 
 async function getRepos() {
   return await Promise.resolve(demoApi.getRepos()).then((e) => {

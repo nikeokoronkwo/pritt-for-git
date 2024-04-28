@@ -1,3 +1,19 @@
+<script setup>
+import * as demoApi from '@/api/demo'
+
+const props = defineProps({
+  repo: String
+});
+
+async function getRepoInformation() {
+  return await Promise.resolve(demoApi.getRepoInfo(props.repo)).then((e) => {
+    return typeof e.data === "string" ? JSON.parse(e.data) : e.data
+  });
+}
+
+let repoInfo = await getRepoInformation();
+</script>
+
 <template>
   <div>
     <section class="upper-display">

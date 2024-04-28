@@ -1,5 +1,4 @@
 <script>
-import RepoView from '../components/RepoView.vue'
 export default {
   name: 'DynamicRoute',
   data() {
@@ -11,13 +10,22 @@ export default {
     // Access dynamic parameter from route
     this.dynamicParam = this.$route.params.id
   },
-  components: {
-    RepoView
-  }
 }
+</script>
+
+<script setup>
+import RepoView from '../components/RepoView.vue'
 </script>
 
 <template>
   <nav></nav>
-  <RepoView />
+  <Suspense>
+    <RepoView :repo=dynamicParam />
+
+    <template #fallback>
+        <div>
+          Sorry, the repository {{ dynamicParam }} could not be retrieved at this moment
+        </div>
+      </template>
+  </Suspense>
 </template>

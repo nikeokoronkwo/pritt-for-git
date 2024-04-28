@@ -11,7 +11,7 @@ async function getDir() {
   return dirHandle
 }
 
-const selectedDirectory = ref('')
+let selectedDirectory = ref('')
 
 function selectDir(event) {
   const files = event.target.files

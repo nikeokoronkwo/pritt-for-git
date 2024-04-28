@@ -16,7 +16,11 @@ import RepositoriesView from '../components/RepositoriesView.vue'
     <Suspense>
       <RepositoriesView />
 
-      <template #fallback> Loading... </template>
+      <template #fallback>
+        <div>
+          Sorry, the repositories could not be retrieved at this moment
+        </div>
+      </template>
     </Suspense>
   </div>
 </template>
