@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { createRepo } from '@/api/demo'
+import router from '@/router';
 function handleFolderSelect(event) {
   const selectedFolder = event.target.files[0] // Assuming only one folder is selected
   this.$refs.folder = selectedFolder
@@ -23,6 +24,12 @@ function selectDir(event) {
   }
 }
 
+async function makeRepository(path, name) {
+  createRepo(path, name).then((e) => {
+    router.push({path: "/repositories"})
+  })
+}
+
 const path = ref('')
 const name = ref('')
 </script>
@@ -37,8 +44,8 @@ const name = ref('')
       <input v-model="path" id="path" />
       <br />
     </form>
-    <button @click="createRepo(path, name)">
-      <RouterLink to="/repositories">Create</RouterLink>
+    <button @click="makeRepository(path, name)">
+      Create
     </button>
   </div>
 </template>
