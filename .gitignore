@@ -8,3 +8,4 @@ examples/project-one
 data/
 **/*.g.dart
 **/.build/
+**/package-lock.json
