@@ -6,3 +6,4 @@ internal/
 **/dist/
 examples/project-one
 data/
+**/*.g.dart
