@@ -19,7 +19,7 @@ In future releases, based on optimizations and demands, the requirements needed 
 
 Clone the git repository
 ```bash
-git clone https://__/__.git
+git clone https://github.com/nikeokoronkwo/pritt.git
 cd pritt
 ```
 Once you have that, you can run the following command to build the project. 
@@ -29,12 +29,15 @@ Once you have that, you can run the following command to build the project.
 
 This will run `prittbuild` and build the pritt project. If you want to specify a different directory to build the output to, you can do so by adding the `--output` option with the desired output.
 
-Alternatively, you can install [`nix`](https://nixos.org/) and run the following. 
+Alternatively, you can install [`nix`](https://nixos.org/) and run the following to use the `nix-shell` environment to build the project 
 ```bash
-./tools/nix-build
+./tools/build-nix
 ```
 
 Nix will pull in the needed dependencies temporarily and build pritt using `prittbuild`.
+
+Currently, the dart version for the server has been bumped down (3.1.0) to allow consistency with nix builds. 
+Active development is ongoing in the [`nix/` directory](./nix/dart-nix/dart.nix) to package more up-to-date dart versions (>=3.3.0) for usage in future builds.
 
 ## Contributing
 When contributing to this project, specify which of `pritt-ui` (the client), `pritt-services`, `pritt-server` and `prittbuild` is the contribution narrowed to, in order to ease implementation.
