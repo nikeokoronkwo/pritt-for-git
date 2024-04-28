@@ -10,5 +10,6 @@ pkgs.mkShellNoCC {
     dart
     go
     nodejs_21
+    yarn
   ];
 }
