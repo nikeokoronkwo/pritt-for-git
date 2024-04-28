@@ -1,3 +1,4 @@
+import 'package:pritt_server/gen/env.dart';
 import 'package:pritt_server/pritt_server.dart';
 import 'package:shelf/shelf.dart';
 // import 'package:shelf_router/shelf_router.dart';
@@ -10,8 +11,7 @@ void main(List<String> args) async {
 
   var server = PrittServer();
   if (!dev) {
-    server = server
-        .client(results.rest.isNotEmpty ? results.rest[0] : '../client/dist');
+    server = server.client(results.rest.isNotEmpty ? results.rest[0] : client);
   }
   server.router
     ..get('/api/repos', getReposHandler(port, dev))
