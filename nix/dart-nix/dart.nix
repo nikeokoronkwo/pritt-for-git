@@ -3,7 +3,7 @@
     lib,
     fetchFromGitHub,
     python,
-    pkgs
+    pkgs,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +19,11 @@ stdenv.mkDerivation {
 
     buildInputs = [ 
         python
-        (if pkgs.stdenv.isDarwin then xcodebuild6 else null)
-        (if pkgs.stdenv.isLinux then git else null)
+        # (if pkgs.stdenv.isDarwin then xcodebuild6 else null)
+        # (if pkgs.stdenv.isLinux then git else null)
     ];
+
+    buildPhase = ''
+    ./tool/build.py
+    '';
 }
