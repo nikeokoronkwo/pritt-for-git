@@ -1,5 +1,6 @@
 <script setup>
 import * as demoApi from '@/api/demo'
+import { onMounted } from 'vue';
 
 const props = defineProps({
   repo: String
@@ -12,6 +13,10 @@ async function getRepoInformation() {
 }
 
 let repoInfo = await getRepoInformation();
+
+onMounted(() => {
+  console.log(repoInfo);
+})
 </script>
 
 <template>
