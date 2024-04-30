@@ -77,23 +77,28 @@ Handler addRepoHandler(String name, int port, [bool preprod = false]) {
   };
 }
 
-
 Handler getRepoInfo(String name, int port, bool dev) {
   List jsonData = [];
   try {
     jsonData = json.decode(File(dataPath).readAsStringSync());
-  } on FileSystemException catch (_) { 
-    return (Request req) => Response.internalServerError(body: "Couldn't get data");
+  } on FileSystemException catch (_) {
+    return (Request req) =>
+        Response.internalServerError(body: "Couldn't get data");
   } catch (e) {
     return (Request req) => Response(808, body: "Unknown Error");
   }
 
-  String itemPath = jsonData.firstWhere((element) => element['name'] == name)['path'];
+  String itemPath =
+      jsonData.firstWhere((element) => element['name'] == name)['path'];
 
   return (Request req) async {
     if (dev) {
       String pathToGoGit = p.join(services, "git");
-      final gitResult = await Process.run("go", ["run", ".", itemPath, "--json"], workingDirectory: pathToGoGit, stdoutEncoding: utf8, stderrEncoding: utf8);
+      final gitResult = await Process.run(
+          "go", ["run", ".", itemPath, "--json"],
+          workingDirectory: pathToGoGit,
+          stdoutEncoding: utf8,
+          stderrEncoding: utf8);
       if (gitResult.exitCode != 0) {
         return Response.badRequest(body: "A git repository could not be found");
       } else {
@@ -111,5 +116,4 @@ Handler getRepoInfo(String name, int port, bool dev) {
       }
     }
   };
-  
 }

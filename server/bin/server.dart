@@ -1,6 +1,5 @@
 import 'package:pritt_server/gen/env.dart';
 import 'package:pritt_server/pritt_server.dart';
-import 'package:pritt_server/src/pritt_handlers.dart';
 import 'package:shelf/shelf.dart';
 // import 'package:shelf_router/shelf_router.dart';
 
@@ -18,7 +17,7 @@ void main(List<String> args) async {
     ..get('/api/repos', getReposHandler(port, dev))
     ..post('/api/new/<name>',
         (Request req, String name) => addRepoHandler(name, port, dev)(req))
-    ..get('/api/repo/<name>', (Request req, String name) => getRepoInfo(name, port, dev)(req))
-    ;
+    ..get('/api/repo/<name>',
+        (Request req, String name) => getRepoInfo(name, port, dev)(req));
   server.run(port: port);
 }
