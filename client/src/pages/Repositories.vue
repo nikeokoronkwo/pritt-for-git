@@ -17,9 +17,7 @@ import RepositoriesView from '../components/RepositoriesView.vue'
       <RepositoriesView />
 
       <template #fallback>
-        <div>
-          Sorry, the repositories could not be retrieved at this moment
-        </div>
+        <div>Sorry, the repositories could not be retrieved at this moment</div>
       </template>
     </Suspense>
   </div>

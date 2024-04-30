@@ -1,21 +1,21 @@
 <script setup>
 import * as demoApi from '@/api/demo'
-import { onMounted } from 'vue';
+import { onMounted } from 'vue'
 
 const props = defineProps({
   repo: String
-});
+})
 
 async function getRepoInformation() {
   return await Promise.resolve(demoApi.getRepoInfo(props.repo)).then((e) => {
-    return typeof e.data === "string" ? JSON.parse(e.data) : e.data
-  });
+    return typeof e.data === 'string' ? JSON.parse(e.data) : e.data
+  })
 }
 
-let repoInfo = await getRepoInformation();
+let repoInfo = await getRepoInformation()
 
 onMounted(() => {
-  console.log(repoInfo);
+  console.log(repoInfo)
 })
 </script>
 

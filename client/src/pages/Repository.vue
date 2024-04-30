@@ -9,7 +9,7 @@ export default {
   created() {
     // Access dynamic parameter from route
     this.dynamicParam = this.$route.params.id
-  },
+  }
 }
 </script>
 
@@ -20,12 +20,10 @@ import RepoView from '../components/RepoView.vue'
 <template>
   <nav></nav>
   <Suspense>
-    <RepoView :repo=dynamicParam />
+    <RepoView :repo="dynamicParam" />
 
     <template #fallback>
-        <div>
-          Sorry, the repository {{ dynamicParam }} could not be retrieved at this moment
-        </div>
-      </template>
+      <div>Sorry, the repository {{ dynamicParam }} could not be retrieved at this moment</div>
+    </template>
   </Suspense>
 </template>
