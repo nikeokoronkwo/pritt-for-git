@@ -6,7 +6,7 @@ require 'yaml'
 require 'fileutils'
 
 module PrittBuild
-  def self.build_service(directory, lang, output, config={})
+  def self.build_service(directory, lang, output, config={}, bin_path=nil)
     service_name = config[:name] || File.basename(directory)
     service_bin_name = "pritt-#{service_name}"
     build_pwd = Dir.pwd
@@ -42,7 +42,7 @@ module PrittBuild
 
       # Run command
       PrittLogger::log("#{service_name} service: Running #{pre[:cmd]} at #{service_cmd_dir}", PrittLogger::LogLevel::INFO)
-      service_runner.run(pre[:cmd])
+      service_runner.run((bin_path != nil && bin_path != "") ? (pre[:cmd]).sub!(lang, bin_path) : pre[:cmd])
     end
 
     # Change back to main dir
@@ -54,7 +54,7 @@ module PrittBuild
     when "go"
       service_entry_dir = File.dirname(service_entrypoint)
       Dir.chdir(service_entry_dir)
-      service_runner.run("go build -o pritt-#{service_name} .")
+      service_runner.run("#{(bin_path != nil && bin_path != "") ? bin_path : "go"} build -o pritt-#{service_name} .")
       if service_runner.exit_code != 0
         exit service_runner.exit_code
       end
@@ -64,14 +64,14 @@ module PrittBuild
         # Run from project root
         service_entry_dir = File.dirname(File.dirname(service_entrypoint))
         Dir.chdir(service_entry_dir)
-        service_runner.run("dart compile bin/#{File.basename(service_entrypoint)} -o pritt-#{service_name}")
+        service_runner.run("#{(bin_path != nil && bin_path != "") ? bin_path : "dart"} compile bin/#{File.basename(service_entrypoint)} -o pritt-#{service_name}")
         if service_runner.exit_code != 0
           exit service_runner.exit_code
         end
       else
         service_entry_dir = File.dirname(service_entrypoint)
         Dir.chdir(service_entry_dir)
-        service_runner.run("dart compile #{File.basename(service_entrypoint)} -o pritt-#{service_name}")
+        service_runner.run("#{(bin_path != nil && bin_path != "") ? bin_path : "dart"} compile #{File.basename(service_entrypoint)} -o pritt-#{service_name}")
         if service_runner.exit_code != 0
           exit service_runner.exit_code
         end

@@ -72,6 +72,32 @@ def parse_args(cmdname = "build")
     opt.on("-v", "--version", "get prittbuild's current version") do |ver|
       options[:version] = ver
     end
+    opt.on("--go-path PATH", "Path to the golang binary") do |go|
+      unless File.exists?(go)
+        puts "The path at #{go} does not exist"
+        exit 1
+      end
+      options[:go] = go
+    end
+    opt.on("--dart-path PATH", "Path to the dart binary") do |dart|
+      unless File.exists?(dart)
+        puts "The path at #{dart} does not exist"
+        exit 1
+      end
+      options[:dart] = dart
+    end
+    opt.on("--node-path PATH", "Path containing node and npm (if /path/to/node, pass '/path/to')") do |node|
+      unless File.exists?(node)
+        puts "The path at #{node} does not exist"
+        exit 1
+      end
+      unless File.directory?(node)
+        puts "The path given at #{node} isn't a directory. Did you mean -> #{File.dirname(node)}?"
+        exit 1
+      end
+      options[:node] = File.join(node, "node")
+      options[:npm] = File.join(node, "npm")
+    end
   end.parse!
   return options
 end

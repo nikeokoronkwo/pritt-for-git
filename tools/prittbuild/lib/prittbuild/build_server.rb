@@ -5,11 +5,12 @@ require_relative "utils/runner"
 require 'fileutils'
 
 module PrittBuild
-  def self.build_server(directory, output, config={})
+  def self.build_server(directory, output, config={}, bin_path=nil)
     # Server built in dart
     build_pwd = Dir.pwd
     server_target_file = "bin#{separator}server.dart"
     server_runner = PrittRunner.new()
+    server_binary = (bin_path != nil && bin_path != "") ? bin_path : "dart"
 
     PrittLogger::log("Begin Building server and cli", PrittLogger::LogLevel::INFO)
 
@@ -31,15 +32,15 @@ module PrittBuild
     Dir.chdir(directory)
 
     # Get dependencies
-    PrittLogger::log("Getting Client Dependencies", PrittLogger::LogLevel::INFO)
-    server_runner.run("dart pub get")
+    PrittLogger::log("Getting Server Dependencies", PrittLogger::LogLevel::INFO)
+    server_runner.run("#{server_binary} pub get")
 
     # Run build_runner
     PrittLogger::log("Applying Configurations to server code", PrittLogger::LogLevel::INFO)
 
     server_env_gen_file = File.join(directory, "lib#{separator}gen#{separator}env.g.dart")
     FileUtils.rm(server_env_gen_file) if File.exists?(server_env_gen_file)
-    server_runner.run("dart run build_runner build")
+    server_runner.run("#{server_binary} run build_runner build")
     if server_runner.exit_code != 0
       PrittLogger::log("Error applying configurations", PrittLogger::LogLevel::SEVERE)
       exit 1
@@ -54,14 +55,14 @@ module PrittBuild
 
       # Run command
       PrittLogger::log("Running #{pre[:cmd]} at #{server_script_cmd_dir}", PrittLogger::LogLevel::INFO)
-      server_runner.run(pre[:cmd])
+      server_runner.run((bin_path != nil && bin_path != "") ? (pre[:cmd]).sub!(lang, bin_path) : pre[:cmd])
     end
     Dir.chdir(build_pwd)
 
     # Run tests
     PrittLogger::log("Running tests on server and cli", PrittLogger::LogLevel::INFO)
     Dir.chdir(directory)
-    server_runner.run("dart test")
+    server_runner.run("#{server_binary} test")
     if server_runner.exit_code != 0
       PrittLogger::log("Some tests failed on the server", PrittLogger::LogLevel::SEVERE)
       exit server_runner.exit_code
@@ -69,7 +70,7 @@ module PrittBuild
 
     # Compile
     PrittLogger::log("Compiling into pritt binary", PrittLogger::LogLevel::INFO)
-    server_runner.run("dart compile exe -o pritt #{server_target_file}")
+    server_runner.run("#{server_binary} compile exe -o pritt #{server_target_file}")
     if server_runner.exit_code != 0
       PrittLogger::log("Failed to compile server", PrittLogger::LogLevel::SEVERE)
       exit server_runner.exit_code

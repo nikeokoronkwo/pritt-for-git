@@ -6,7 +6,7 @@ module PrittBuild
     end
 
     def exists?(program)
-      if system("where #{program} > /dev/null 2>&1")
+      if !system("command -v #{program} > /dev/null 2>&1")
         PrittLogger::log("Error: #{program} doesn't exist", PrittLogger::LogLevel::SEVERE)
         return false
       else
@@ -15,10 +15,10 @@ module PrittBuild
       end
     end
 
-    def version?(program, version=nil)
+    def version?(program, version=nil, path=nil)
       if version != nil && version != ""
         if program == :go
-          v = `go version`.match(/go(\d+\.\d+\.\d+)/)[1]
+          v = `#{path || "go"} version`.match(/go(\d+\.\d+\.\d+)/)[1]
           vObj = Version.new(v)
           vTarget = Version.new(version)
           if vObj < vTarget
@@ -29,7 +29,7 @@ module PrittBuild
             return true
           end
         elsif program == :dart
-          v = `dart --version`.match(/\b\d+\.\d+\.\d+\b/)[0]
+          v = `#{path || "dart"} --version`.match(/\b\d+\.\d+\.\d+\b/)[0]
           vObj = Version.new(v)
           vTarget = Version.new(version)
           if vObj < vTarget
@@ -40,7 +40,7 @@ module PrittBuild
             return true
           end
         elsif program == :npm
-          v = `node --version`.match(/\d+\.\d+\.\d+/)[0]
+          v = `#{path || "node"} --version`.match(/\d+\.\d+\.\d+/)[0]
           vObj = Version.new(v)
           vTarget = Version.new(version)
           if vObj < vTarget
@@ -50,6 +50,8 @@ module PrittBuild
             PrittLogger::log("#{program} is of desired version - #{v}", PrittLogger::LogLevel::FINE)
             return true
           end
+        else
+          return false
         end
       else
         PrittLogger::log("#{program} is of desired version", PrittLogger::LogLevel::FINE)

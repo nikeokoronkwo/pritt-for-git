@@ -2,7 +2,7 @@ require_relative "utils/log"
 require_relative "validate"
 
 module PrittBuild
-  def self.check(deps = {:go => "1.20.0", :dart => "3.1.0", :npm => "", :yarn => ""})
+  def self.check(deps = {:go => "1.20.0", :dart => "3.1.0", :npm => "", :yarn => ""}, paths = {})
 
     # dependencies that aren't available
     unavailable_deps = []
@@ -22,15 +22,17 @@ module PrittBuild
         yarn_exists = true
       end
 
-      if !available && key != :yarn
+      if !available && key != :yarn && paths[key] == nil
         unavailable_deps << key
+        next
       elsif !available && key == :yarn
         PrittLogger::log("yarn isn't found on your system. Defaulting to npm", PrittLogger::LogLevel::WARN)
+        next
       end
 
       # Check if dependency has desired version
       PrittLogger::log("Checking whether #{key} is of desired version #{value} or above", PrittLogger::LogLevel::INFO)
-      versioned = validator.version?(key, value)
+      versioned = validator.version?(key, value, key == :npm ? paths[:node] : paths[key])
       if !versioned && key != :yarn
         unversioned_deps << key
       end

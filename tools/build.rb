@@ -17,6 +17,11 @@ def main()
     puts "PrittBuild v#{PrittBuild.get_version} on #{RUBY_PLATFORM}"
     exit 0
   end
+
+  bin_paths = {}
+  options.each do |name, path|
+    bin_paths[name] = path
+  end
   # Derive build directories
   pritt_build_dir = PrittBuild::BuildDir.new(File.expand_path(options[:output] || "#{Dir.home}#{separator}.pritt#{separator}build"))
 
@@ -32,7 +37,7 @@ def main()
     :go => get_go_version(pritt_project_dir),
     :dart => get_dart_version(pritt_project_dir),
     :yarn => ""
-  })
+  }, bin_paths)
 
   yarn_exists = optional_deps[:yarn]
 
@@ -43,7 +48,7 @@ def main()
   pritt_client_dir = "#{pritt_project_dir}#{separator}client"
 
   # Build client
-  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir, yarn_exists)
+  PrittBuild.build_client(pritt_client_dir, pritt_build_dir.client_dir, yarn_exists, bin_paths[:npm])
 
   # Build Assets
   PrittBuild.gen(PrittBuild::Assets::DATA, pritt_build_dir.data_dir, "[]")
