@@ -10,11 +10,11 @@ module PrittBuild
   # directory - The client directory
   # output - The client output directory
   #
-  def self.build_client(directory, output, yarn=false, path=nil)
+  def self.build_client(directory, output, yarn=false)
     # The dist build for client - built with Vite
     client_dist_build = "#{directory}/dist"
-    client_npm_bin = path || "npm"
-    client_npx_bin = path != nil ? File.join(File.dirname(path), "npx") : "npx"
+    client_npm_bin = "npm"
+    client_npx_bin = "npx"
     builder_pwd = Dir.pwd
     client_runner = PrittRunner.new()
 

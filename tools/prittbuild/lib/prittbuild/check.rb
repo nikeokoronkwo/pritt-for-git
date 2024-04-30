@@ -32,7 +32,7 @@ module PrittBuild
 
       # Check if dependency has desired version
       PrittLogger::log("Checking whether #{key} is of desired version #{value} or above", PrittLogger::LogLevel::INFO)
-      versioned = validator.version?(key, value, key == :npm ? paths[:node] : paths[key])
+      versioned = validator.version?(key, value, paths[key])
       if !versioned && key != :yarn
         unversioned_deps << key
       end

@@ -40,7 +40,7 @@ module PrittBuild
             return true
           end
         elsif program == :npm
-          v = `#{path || "node"} --version`.match(/\d+\.\d+\.\d+/)[0]
+          v = `"node" --version`.match(/\d+\.\d+\.\d+/)[0]
           vObj = Version.new(v)
           vTarget = Version.new(version)
           if vObj < vTarget
