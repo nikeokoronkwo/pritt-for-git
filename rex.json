@@ -1,3 +1,6 @@
 {
-    
+    "$schema": "https://esm.sh/gh/nikeokoronkwo/rex/schemas/rex.json",
+    "repository": {
+        "url": "https://github.com/nikeokoronkwo/pritt"
+    }
 }

@@ -6,6 +6,12 @@
     pkgs,
 }:
 
+let
+  outDir = { arch, platform }: {
+    
+  };
+in
+
 stdenv.mkDerivation {
     pname = "dart-new";
     version = "3.3.4";
@@ -24,6 +30,6 @@ stdenv.mkDerivation {
     ];
 
     buildPhase = ''
-    ./tool/build.py
+    ./tool/build.py --mode release create_sdk
     '';
 }
