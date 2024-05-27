@@ -20,7 +20,7 @@ function selectDir(event) {
     const directory = files[0]
     // Assuming you want just the directory name without the path
     const directoryName = directory.webkitRelativePath.split('/')[0]
-    selectedDirectory = directoryName
+    selectedDirectory.value = directoryName
   }
 }
 

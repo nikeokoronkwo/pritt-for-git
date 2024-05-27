@@ -11,3 +11,4 @@ data/
 **/*.g.dart
 **/.build/
 **/package-lock.json
+client/.env

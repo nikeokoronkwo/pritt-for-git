@@ -1,8 +1,4 @@
 <script setup>
-// import { defineAsyncComponent } from 'vue';
-// const RepositoriesView = defineAsyncComponent(() => {
-//   import('../components/RepositoriesView.vue')
-// })
 import RepositoriesView from '../components/RepositoriesView.vue'
 </script>
 

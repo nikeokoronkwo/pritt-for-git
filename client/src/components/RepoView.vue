@@ -21,6 +21,7 @@ onMounted(() => {
 
 <template>
   <div>
+    <div class="menu"></div>
     <section class="upper-display">
       <div></div>
     </section>
