@@ -1,5 +1,6 @@
 {
     "files.associations": {
         ".pubignore": "ignore",
-    }
+    },
+    "deno.enable": true,
 }
