@@ -1,7 +1,6 @@
 import 'package:pritt_server/gen/env.dart';
 import 'package:pritt_server/pritt_server.dart';
 import 'package:shelf/shelf.dart';
-// import 'package:shelf_router/shelf_router.dart';
 
 void main(List<String> args) async {
   final results = parse(args);
