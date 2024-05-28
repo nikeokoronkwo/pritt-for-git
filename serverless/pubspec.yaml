@@ -1,0 +1,6 @@
+name: pritt_functions
+description: Functions used for Pritt, which can easily be deployed as serverless functions or serverless containers
+publish_to: none
+
+environment:
+  sdk: ^3.1.3
