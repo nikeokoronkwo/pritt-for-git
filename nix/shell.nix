@@ -1,5 +1,5 @@
 let
-  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-23.11";
+  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.05";
   pkgs = import nixpkgs { config = {}; overlays = []; };
 in
 
@@ -9,7 +9,7 @@ pkgs.mkShellNoCC {
     # Todo: Replace the dart package with the new one at `dart-nix/`
     dart
     go
-    nodejs_21
+    nodejs
     yarn
   ];
 }
