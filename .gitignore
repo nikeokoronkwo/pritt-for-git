@@ -12,3 +12,4 @@ data/
 **/.build/
 **/package-lock.json
 client/.env
+server/pubspec.lock
