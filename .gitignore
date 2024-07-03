@@ -13,3 +13,5 @@ data/
 **/package-lock.json
 client/.env
 server/pubspec.lock
+
+**/.DS_Store
