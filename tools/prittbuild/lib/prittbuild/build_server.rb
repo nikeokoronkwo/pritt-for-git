@@ -14,21 +14,6 @@ module PrittBuild
 
     PrittLogger::log("Begin Building server and cli", PrittLogger::LogLevel::INFO)
 
-    # Set env
-    PrittLogger::log("Setting Configurations", PrittLogger::LogLevel::INFO)
-    server_env_file = File.join(directory, ".env")
-    server_env_orig = File.read(server_env_file)
-    server_env_content = {
-      "DATA_JSON" => File.join(config[:data] || "#{output}#{separator}..#{separator}data", "repos.json"),
-      "CLIENT_DIR" => config[:client] || "#{output}#{separator}..#{separator}client",
-      "SERVICES_DIR" => config[:services] || "#{output}#{separator}..#{separator}bin",
-      "DEV" => "false"
-    }
-    server_env_content = server_env_content.map do |key, value|
-      "#{key}=\"#{value}\""
-    end.join("\n")
-    File.write(server_env_file, server_env_content)
-
     Dir.chdir(directory)
 
     # Get dependencies

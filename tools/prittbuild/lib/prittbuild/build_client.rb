@@ -39,7 +39,6 @@ module PrittBuild
     client_format = yarn ? "yarn format" : "#{client_npx_bin} #{client_format_command}"
     client_runner.run(client_format)
 
-    # Write .env file
     PrittLogger::log("Setting Up Client Environment", PrittLogger::LogLevel::INFO)
 
     # Nothing for now
