@@ -19,6 +19,11 @@ class PrittServer {
     return this;
   }
 
+  PrittServer add(Handler handler) {
+    _cascade = _cascade.add(handler);
+    return this;
+  }
+
   void run({String? ip, int? port, Map<String, dynamic>? cors}) async {
     final serverIp = ip ?? InternetAddress.anyIPv4;
     final handler = Pipeline()

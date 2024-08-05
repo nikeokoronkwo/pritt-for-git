@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:pritt_server/gen/env.dart';
-import 'package:pritt_server/src/funcs/hash_info.dart';
-import 'package:pritt_server/src/utils/cors.dart';
-import 'package:pritt_server/src/utils/log.dart';
 import 'package:shelf/shelf.dart';
 import 'package:path/path.dart' as p;
+
+import 'env.dart';
+import 'funcs/hash_info.dart';
+import 'utils/cors.dart';
+import 'utils/log.dart';
 
 Handler getReposHandler(int port, [bool preprod = false]) {
   try {

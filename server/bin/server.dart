@@ -1,4 +1,3 @@
-import 'package:pritt_server/gen/env.dart';
 import 'package:pritt_server/pritt_server.dart';
 import 'package:shelf/shelf.dart';
 
@@ -12,11 +11,13 @@ void main(List<String> args) async {
   if (!dev) {
     server = server.client(results.rest.isNotEmpty ? results.rest[0] : client);
   }
+
   server.router
     ..get('/api/repos', getReposHandler(port, dev))
     ..post('/api/new/<name>',
         (Request req, String name) => addRepoHandler(name, port, dev)(req))
     ..get('/api/repo/<name>',
         (Request req, String name) => getRepoInfo(name, port, dev)(req));
+  
   server.run(port: port);
 }
